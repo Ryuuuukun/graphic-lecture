@@ -89,6 +89,8 @@ public:
 };
 
 struct ShadowLightTracing {
+    static constexpr float LIGHT_THRESHOLD = 10e-3;
+
     std::shared_ptr<Scene> scene;
 
     light3f direct;
@@ -117,23 +119,29 @@ public:
         if (raycast_light.param < VISIBLIE_DISTANCE) {
             auto& attibutes = raycast_light.get();
 
-            result = ambience.color * ambience.intensity;
-
-            ray3f shadow_ray(raycast_light.point, direct.origin);
-
-            bool shadow = false;
-            raycast_shadow.reset();
-            for (auto const& model : scene->models) {
-                model.trace(shadow_ray, raycast_shadow);
-                if (raycast_shadow.param > 10e-2 && raycast_shadow.param < VISIBLIE_DISTANCE) {
-                    shadow = true;
-                }
+            color3f coeff(0.9f, 0.3f, 0.7f);
+            if (attibutes.material.has()) {
+                coeff = attibutes.material.get().coeff;
             }
 
-            if (!shadow) {
-                float cos = dot(normalized(raycast_light.point - direct.origin), attibutes.normal.get());
-                if (cos > 0) {
-                    result += direct.color * direct.intensity * cos;
+            result = ambience.color * ambience.intensity * coeff;
+
+            float cos = dot(normalized(raycast_light.point - direct.origin), attibutes.normal.get());
+            if (cos > 0) {
+                ray3f shadow_ray(raycast_light.point, direct.origin);
+
+                bool light = false;
+
+                raycast_shadow.reset();
+                for (auto const& model : scene->models) {
+                    model.trace(shadow_ray, raycast_shadow);
+                    if (std::abs(raycast_shadow.param) < LIGHT_THRESHOLD) {
+                        light = true;
+                    }
+                }
+
+                if (light) {
+                    result += direct.color * direct.intensity * cos * coeff;
                 }
             }
         }

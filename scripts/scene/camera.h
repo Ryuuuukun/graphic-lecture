@@ -7,18 +7,17 @@ struct Camera {
     float focal;
     vec3f origin;
 
-    vec3f axis_x;
-    vec3f axis_y;
-    vec3f axis_z;
+    vec3f axis_x = {  1.0f,  0.0f,  0.0f };
+    vec3f axis_y = {  0.0f,  1.0f,  0.0f };
+    vec3f axis_z = {  0.0f,  0.0f, -1.0f };
 
 public:
-    explicit Camera(float focal, vec3f origin)
+    explicit Camera(float focal, vec3f origin, vec3f look)
         : focal(focal)
         , origin(origin)
-        , axis_x(1, 0, 0)
-        , axis_y(0, 1, 0)
-        , axis_z(0, 0, -1)
-    {}
+    {
+        look_at(look);
+    }
 
     void look_at(vec3f point);
 
