@@ -32,7 +32,7 @@ std::vector<size_t> BVH::find_hits(bbox3f const& box, MeshInstance const& instan
 }
 
 void BVH::build(size_t cuts, MeshInstance const& instance) {
-    root = std::make_shared<Node>(bbox3f::bound_box(instance.vertices));
+    root = std::make_shared<Node>(bbox3f::from_bound(instance.vertices));
     build_impl(root, cuts, instance);
 }
 

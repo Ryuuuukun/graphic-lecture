@@ -7,7 +7,7 @@
 Model::Model(std::shared_ptr<MeshInstance> instance)
     : instance(std::move(instance))
 {
-    shell = sphere3f::bound_sphere(this->instance->vertices);
+    shell = ShellVolume::from_bound(this->instance->vertices);
     build_shells();
 }
 
@@ -79,14 +79,14 @@ void Model::trace_impl(TriangleDescriptor const& triangle, ray3f const& ray, Ray
 void Model::transform(affine3f const& adapter) {
     instance->transform(adapter);
 
-    shell = sphere3f::bound_sphere(this->instance->vertices);
+    shell = ShellVolume::from_bound(this->instance->vertices);
     build_shells();
 }
 
 void Model::build_shells() {
     shells.clear();
     for (auto const& triangle : instance->triangles) {
-        shells.push_back(sphere3f::bound_sphere({
+        shells.push_back(ShellVolume::from_bound({
             instance->vertices[triangle.vertices[0]],
             instance->vertices[triangle.vertices[1]],
             instance->vertices[triangle.vertices[2]]

@@ -23,7 +23,7 @@ public:
         : min(min), max(max)
     {}
 
-    static hyperbox bound_box(std::vector<vec<T, DIM>> const& points) {
+    static hyperbox from_bound(std::vector<vec<T, DIM>> const& points) {
         vec<T, DIM> _min = {  std::numeric_limits<T>::infinity() };
         vec<T, DIM> _max = { -std::numeric_limits<T>::infinity() };
         for (auto const& vert : points) {

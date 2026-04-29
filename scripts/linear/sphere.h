@@ -19,7 +19,7 @@ public:
         : origin(origin), radius(radius)
     {}
 
-    static hypersphere bound_sphere(std::vector<vec<T, DIM>> const& points) {
+    static hypersphere from_bound(std::vector<vec<T, DIM>> const& points) {
         vec<T, DIM> _min = {  std::numeric_limits<T>::infinity() };
         vec<T, DIM> _max = { -std::numeric_limits<T>::infinity() };
         for (auto const& vert : points) {

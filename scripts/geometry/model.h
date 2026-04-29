@@ -11,13 +11,13 @@ struct Model {
     static constexpr size_t DEFAULT_CUTS_BVH = 1;
     static constexpr float EPS = 10e-5;
 
+    using ShellVolume = sphere3f;
+
     std::shared_ptr<MeshInstance> instance;
     std::shared_ptr<Material>     material;
 
-    BVH      bvh;
-    sphere3f shell;
-
-    std::vector<sphere3f> shells;
+    ShellVolume              shell;
+    std::vector<ShellVolume> shells;
 
 public:
     Model(std::shared_ptr<MeshInstance> instance);

@@ -39,9 +39,9 @@ int main(int argc, char* argv[]) {
     auto scene = std::make_shared<Scene>();
     scene->load_models({
         {
-            .filename = "../resources/icosphere.obj",
+            .filename  = "../resources/icosphere.obj",
             .transform = fin::rotate_y(-std::numbers::pi / 4),
-            .material = std::make_shared<Material>(color3f(0.7f))
+            .material  = std::make_shared<Material>(color3f(0.7f))
         },
         {
             .filename  = "../resources/torus.obj",
